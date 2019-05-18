@@ -13,12 +13,14 @@ UI.prototype.addBookToList = function(book){
   const bookList = document.getElementById('book-list');
   //create tr element
   const row = document.createElement('tr');
+
   //insert cols
   row.innerHTML = `
     <td>${book.title}</td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
     <td><a href="#" class="delete"> X </a></td>`;
+
   bookList.appendChild(row);
 }
 
@@ -46,6 +48,13 @@ UI.prototype.showAlert = function(message, className) {
   }, 3000);
 }
 
+//Delete book
+UI.prototype.deleteBook = function(target){
+  if (target.className === 'delete'){
+    target.parentElement.parentElement.remove();
+  }
+}
+
 //Event Listeners
 document.getElementById('book-form').addEventListener('submit',function(e){
   //Get form values
@@ -62,26 +71,32 @@ document.getElementById('book-form').addEventListener('submit',function(e){
   //Validate
   if(title === '' || author === '' || isbn === ''){
 
-    //Error alert
-    ui.showAlert('Ошибка. Заполните все поля.','error');
+    //error alert
+    ui.showAlert('Ошибка. Заполните все поля.', 'error');
 
   } else {
     //add book to UI
     ui.addBookToList(book);
 
     //show success alert
-    ui.showAlert('Книга добавлена!','success');
+    ui.showAlert('Книга добавлена!', 'success');
 
     //clear fields
     ui.clearFields();
+
   }
-
-  
-
-
-
-  
 
   e.preventDefault();
 });
 
+//Event Listener for delete button
+document.getElementById('book-list').addEventListener('click', function(e){
+  //initialize UI
+  const ui = new UI();
+  ui.deleteBook(e.target);
+
+  //show message
+  ui.showAlert('Книга удалена!', 'success');
+  
+  e.preventDefault();
+})
