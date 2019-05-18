@@ -29,6 +29,23 @@ UI.prototype.clearFields = function(){
   document.getElementById('isbn').value = '';
 }
 
+//Show alert
+UI.prototype.showAlert = function(message, className) {
+  const div = document.createElement('div');
+  div.className = `alert ${className}`;
+  div.appendChild(document.createTextNode(message));
+  //get parent
+  const container = document.querySelector('.container');
+  const form = document.getElementById('book-form');
+  //insert alert
+  container.insertBefore(div, form);
+
+  //remove alert
+  setTimeout(function(){
+    document.querySelector('.alert').remove();
+  }, 3000);
+}
+
 //Event Listeners
 document.getElementById('book-form').addEventListener('submit',function(e){
   //Get form values
@@ -42,11 +59,26 @@ document.getElementById('book-form').addEventListener('submit',function(e){
   //initialize UI
   const ui = new UI();
 
-  //add book to UI
-  ui.addBookToList(book);
+  //Validate
+  if(title === '' || author === '' || isbn === ''){
 
-  //clear fields
-  ui.clearFields();
+    //Error alert
+    ui.showAlert('Ошибка. Заполните все поля.','error');
+
+  } else {
+    //add book to UI
+    ui.addBookToList(book);
+
+    //show success alert
+    ui.showAlert('Книга добавлена!','success');
+
+    //clear fields
+    ui.clearFields();
+  }
+
+  
+
+
 
   
 
